@@ -1,15 +1,19 @@
+# Choosing the SO
 FROM centos:7
 
-# Get pre-reqs
-RUN yum -y -q update && \
-    yum -y -q install wget epel-release && \
-    yum -y -q clean all
-    yum -y install gcc mono-mcs && \
-    rm -rf /var/lib/apt/lists/*
+# Install GCC(C Compiler).
+RUN yum -y -q update
+RUN yum install -y gcc
 
-COPY program /app/
-COPY run_example/* /app/run_example/
+# Copy specific files from machine to docker image.
+COPY run_example /app/run_example
+COPY terminal.c /app/terminal.c
 
+# Setting Wokspace Directory
 WORKDIR /app
 
-RUN ./program
+# Generating Compiled Terminal.
+RUN gcc terminal.c -o ./terminal
+
+# Running Terminal
+ENTRYPOINT ./terminal

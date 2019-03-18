@@ -13,21 +13,10 @@ int lsh_exit(char **args);
   List of builtin commands, followed by their corresponding functions.
  */
 char *builtin_str[] = {
+    "np",
     "help",
-    "cd",
-    "ls",
-    "chown",
-    "mkdir",
-    "chmod",
-    "cp",
-    "exit",
-    "rm",
-    "cat",
-    "grep",
-    "head",
-    "tail",
-    "clear",
-    "history"};
+    "exit"
+    };
 
 int (*builtin_func[])(char **) = {
     &lsh_np,
@@ -61,7 +50,7 @@ int lsh_help(char **args)
   int i;
   printf("Faculdade Boa Viagem\n");
   printf("Disciplina: Sistema Operacionais.\n");
-  printf("Alunos: ...:\n");
+  printf("Alunos: Gustavo, João, Victor, ?:\n");
 
   for (i = 0; i < lsh_num_builtins(); i++)
   {
