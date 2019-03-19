@@ -1,0 +1,10 @@
+version: '3.6'
+
+services:
+
+  terminal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: terminal
+    image: terminal
