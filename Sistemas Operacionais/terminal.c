@@ -5,16 +5,19 @@
 #include <stdio.h>
 #include <string.h>
 
+int lsh_cd(char **args);
 int lsh_np(char **args);
 int lsh_help(char **args);
 int lsh_exit(char **args);
 
 char *builtin_str[] = {
+    "cd",
     "np",
     "help",
     "exit"};
 
 int (*builtin_func[])(char **) = {
+    &lsh_cd,
     &lsh_np,
     &lsh_help,
     &lsh_exit};
@@ -22,6 +25,18 @@ int (*builtin_func[])(char **) = {
 int lsh_num_builtins()
 {
   return sizeof(builtin_str) / sizeof(char *);
+}
+
+int lsh_cd(char **args)
+{
+  if (args[1] == NULL) {
+    fprintf(stderr, "lsh: expected argument to \"cd\"\n");
+  } else {
+    if (chdir(args[1]) != 0) {
+      perror("lsh");
+    }
+  }
+  return 1;
 }
 
 int lsh_np(char **args)
@@ -166,11 +181,7 @@ char *lsh_read_line(void)
 
 #define LSH_TOK_BUFSIZE 64
 #define LSH_TOK_DELIM " \t\r\n\a"
-/**
-   @brief Split a line into tokens (very naively).
-   @param line The line.
-   @return Null-terminated array of tokens.
- */
+
 char **lsh_split_line(char *line)
 {
   int bufsize = LSH_TOK_BUFSIZE, position = 0;
