@@ -9,14 +9,10 @@ int lsh_np(char **args);
 int lsh_help(char **args);
 int lsh_exit(char **args);
 
-/*
-  List of builtin commands, followed by their corresponding functions.
- */
 char *builtin_str[] = {
     "np",
     "help",
-    "exit"
-    };
+    "exit"};
 
 int (*builtin_func[])(char **) = {
     &lsh_np,
@@ -30,17 +26,23 @@ int lsh_num_builtins()
 
 int lsh_np(char **args)
 {
-  //grep 'echo' run_example/run.sh | wc -l
-  if (args[1] == NULL)
+  if (args[1] == NULL || args[2] == NULL)
   {
-    fprintf(stderr, "lsh: expected argument to \"cd\"\n");
+    fprintf(stderr, "np: expected arguments <FILE_NAME> '<SEARCHED_TEXT>'\n");
   }
   else
   {
-    if (chdir(args[1]) != 0)
-    {
-      perror("lsh");
-    }
+    char *firstCommand = "grep '";
+    char *endCommand = " | wc -l";
+    char *resultCommand = malloc(strlen(firstCommand) + strlen(args[2]) + strlen(args[1]) + strlen(endCommand) + strlen("' "));
+
+    strcat(resultCommand, firstCommand);
+    strcat(resultCommand, args[2]);
+    strcat(resultCommand, "' ");
+    strcat(resultCommand, args[1]);
+    strcat(resultCommand, endCommand);
+
+    system(resultCommand);
   }
   return 1;
 }
@@ -50,14 +52,8 @@ int lsh_help(char **args)
   int i;
   printf("Faculdade Boa Viagem\n");
   printf("Disciplina: Sistema Operacionais.\n");
-  printf("Alunos: Gustavo, João, Victor, ?:\n");
+  printf("Alunos: Gustavo, João, Ronald, Victor.\n");
 
-  for (i = 0; i < lsh_num_builtins(); i++)
-  {
-    printf("  %s\n", builtin_str[i]);
-  }
-
-  printf("Use the man command for information on other programs.\n");
   return 1;
 }
 
